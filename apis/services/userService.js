@@ -1,13 +1,19 @@
 const { default: axios } = require("axios");
+const { default: AuthUtil } = require("../utils/AuthUtil");
+
+const userDao = require("../models/userDao");
 
 const signup = async (access_token, interest) => {
 	const result = getUserInfoFromKakao(access_token);
 
 	const { kakao_client_id, profile } = result;
 
-	const isSavedUser = await userDao.checkDuplicated(kakao_client_id);
+	const [checkDuplicated] = await userDao.getUserInfo(kakao_client_id);
 
-	if (isSavedUser) {
+	if (checkDuplicated) {
+		const authorization = AuthUtil.__sign_token(checkDuplicated);
+		const message = "ALREADY_IN_SERVICE";
+		return { message, authorization };
 		// 로그인 프로세스로 전환
 	}
 
@@ -33,10 +39,31 @@ const signup = async (access_token, interest) => {
 
 	userDao.addUserInterest(queryBuildForInterest);
 
-	return insertId;
+	const authorization = AuthUtil.__sign_token({
+		id: insertId,
+		nickname: profile.nickname,
+	});
+
+	const message = "USER_CREATED";
+
+	return { message, authorization };
 };
 
-module.exports = { signup };
+const signin = async (access_token) => {
+	const { kakao_client_id } = await getUserInfoFromKakao(access_token);
+
+	const [AccountInfo] = await userDao.getUserInfo(kakao_client_id);
+
+	if (!AccountInfo) {
+		const error = new Error("SIGNUP_REQUIRED");
+		error.statusCode = 401;
+		throw error;
+	}
+	return AuthUtil.__sign_token(AccountInfo);
+	// 회원 정보 수정에 관한 결정 여부
+};
+
+module.exports = { signup, signin };
 
 const getUserInfoFromKakao = async (access_token) => {
 	const result = await axios.post("https://kapi.kakao.com/v2/user/me", {
@@ -50,3 +77,5 @@ const getUserInfoFromKakao = async (access_token) => {
 	const { profile } = result.kakao_account;
 	return { kakao_client_id, profile };
 };
+
+// 모듈화 위해, 로그인 시 kakao_client_id 만 가져오고, 회원가입 시
