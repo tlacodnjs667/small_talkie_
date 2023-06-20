@@ -6,6 +6,13 @@ export default class AuthUtil {
 	}
 
 	static __verify_token(token) {
+		if (!token) {
+			const err = new Error("CANNOT_FIND_TOKEN");
+
+			err.statusCode = 404;
+			throw err;
+		}
+
 		const account = jwt.verify(token, process.env.JWT_SECRET_KEY);
 		return account;
 	}
