@@ -19,4 +19,19 @@ const getTalkieCard = async (isUser, user_id, offset) => {
 	return StrategyByMode[isUser](isUser, offset, user_id);
 };
 
-module.exports = { getTalkieCard };
+const bookemarkTalkie = async (talkie_id, user_id) => {
+	const checkDuplicateBookmark = await talkieDao.checkBookmarkByUserAndTalkie(
+		talkie_id,
+		user_id
+	);
+
+	if (checkDuplicateBookmark.length) {
+		const err = new Error("ALREDY_BOOKMARKED_TALKIE");
+		err.statusCode = 409;
+		throw err;
+	}
+
+	return talkieDao.bookemarkTalkie(talkie_id, user_id);
+};
+
+module.exports = { getTalkieCard, bookemarkTalkie };
