@@ -35,4 +35,61 @@ const getTalkieCard = (isUser, offset, user_id) => {
 	return talkieDataSource.query(QueryToGetTalkie[isUser]);
 };
 
-module.exports = { getTalkieCard };
+const getBookmarkedTalkies = (user_id) => {
+	return talkieDataSource.query(`
+    SELECT
+      id,
+      talk,
+      emoji
+    FROM small_talks
+    LEFT JOIN saved_questions ON saved_questions.talk_id = small_talks.id
+    WHERE saved_questions.user_id = ${user_id}
+  `);
+};
+
+const checkBookmarkById = (bookmark_id) => {
+	return talkieDataSource.query(`
+    SELECT 
+      id,
+      user_id
+    FROM saved_questions
+    WHERE id = ${bookmark_id}
+  `);
+};
+
+const checkBookmarkByUserAndTalkie = (talkie_id, user_id) => {
+	return talkieDataSource.query(`
+    SELECT 
+      id
+    FROM saved_questions
+    WHERE talk_id = ${talkie_id} AND user_id = ${user_id}
+  `);
+};
+
+const bookmarkTalkie = (talkie_id, user_id) => {
+	return talkieDataSource.query(`
+    INSERT INTO saved_questions (
+      talk_id, 
+      user_id
+    ) VALUES (
+      ${talkie_id},
+      ${user_id}
+    );
+  `);
+};
+
+const deleteBookmark = (bookmark_id) => {
+	return talkieDataSource.query(`
+      DELETE FROM saved_questions
+      WHERE id = ${bookmark_id}
+  `);
+};
+
+module.exports = {
+	getTalkieCard,
+	getBookmarkedTalkies,
+	checkBookmarkById,
+	checkBookmarkByUserAndTalkie,
+	bookmarkTalkie,
+	deleteBookmark,
+};

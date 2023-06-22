@@ -8,4 +8,22 @@ router.get(
 	talkieController.getTalkieCard
 );
 
+router.get(
+	"/bookmark",
+	AuthMiddleware.authorizeUser,
+	talkieController.getBookmarkedTalkies
+);
+
+router.post(
+	"/bookmark/:talkie_id",
+	AuthMiddleware.authorizeUser,
+	talkieController.bookmarkTalkie
+);
+
+router.delete(
+	"/bookmark/:bookmark_id",
+	AuthMiddleware.authorizeUser,
+	talkieController.deleteBookmark
+);
+
 module.exports = router;
