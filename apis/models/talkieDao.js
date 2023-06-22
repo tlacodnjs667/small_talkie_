@@ -35,6 +35,18 @@ const getTalkieCard = (isUser, offset, user_id) => {
 	return talkieDataSource.query(QueryToGetTalkie[isUser]);
 };
 
+const getBookmarkedTalkies = (user_id) => {
+	return talkieDataSource.query(`
+    SELECT
+      id,
+      talk,
+      emoji
+    FROM small_talks
+    LEFT JOIN saved_questions ON saved_questions.talk_id = small_talks.id
+    WHERE saved_questions.user_id = ${user_id}
+  `);
+};
+
 const checkBookmarkById = (bookmark_id) => {
 	return talkieDataSource.query(`
     SELECT 
@@ -54,7 +66,7 @@ const checkBookmarkByUserAndTalkie = (talkie_id, user_id) => {
   `);
 };
 
-const bookemarkTalkie = (talkie_id, user_id) => {
+const bookmarkTalkie = (talkie_id, user_id) => {
 	return talkieDataSource.query(`
     INSERT INTO saved_questions (
       talk_id, 
@@ -75,8 +87,9 @@ const deleteBookmark = (bookmark_id) => {
 
 module.exports = {
 	getTalkieCard,
+	getBookmarkedTalkies,
 	checkBookmarkById,
 	checkBookmarkByUserAndTalkie,
-	bookemarkTalkie,
+	bookmarkTalkie,
 	deleteBookmark,
 };

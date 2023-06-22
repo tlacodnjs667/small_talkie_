@@ -19,7 +19,11 @@ const getTalkieCard = async (isUser, user_id, offset) => {
 	return StrategyByMode[isUser](isUser, offset, user_id);
 };
 
-const bookemarkTalkie = async (talkie_id, user_id) => {
+const getBookmarkedTalkies = async (user_id) => {
+	return await talkieDao.getBookmarkedTalkies(user_id);
+};
+
+const bookmarkTalkie = async (talkie_id, user_id) => {
 	const checkDuplicateBookmark = await talkieDao.checkBookmarkByUserAndTalkie(
 		talkie_id,
 		user_id
@@ -31,7 +35,7 @@ const bookemarkTalkie = async (talkie_id, user_id) => {
 		throw err;
 	}
 
-	return talkieDao.bookemarkTalkie(talkie_id, user_id);
+	return talkieDao.bookmarkTalkie(talkie_id, user_id);
 };
 
 const deleteBookmark = async (bookmark_id, user_id) => {
@@ -56,4 +60,9 @@ const deleteBookmark = async (bookmark_id, user_id) => {
 	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
 };
 
-module.exports = { getTalkieCard, bookemarkTalkie, deleteBookmark };
+module.exports = {
+	getTalkieCard,
+	getBookmarkedTalkies,
+	bookmarkTalkie,
+	deleteBookmark,
+};

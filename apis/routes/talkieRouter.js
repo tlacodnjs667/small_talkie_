@@ -8,10 +8,16 @@ router.get(
 	talkieController.getTalkieCard
 );
 
+router.get(
+	"/bookmark",
+	AuthMiddleware.authorizeUser,
+	talkieController.getBookmarkedTalkies
+);
+
 router.post(
 	"/bookmark/:talkie_id",
 	AuthMiddleware.authorizeUser,
-	talkieController.bookemarkTalkie
+	talkieController.bookmarkTalkie
 );
 
 router.delete(
