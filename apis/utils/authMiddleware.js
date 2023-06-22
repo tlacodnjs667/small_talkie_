@@ -21,14 +21,14 @@ export class AuthMiddleware {
 		const { access_token } = req.headers;
 
 		if (!access_token) {
-			req.headers.isUser = false;
+			req.headers.isUser = "GUEST";
 			next();
 			// Guest 처리
 		}
 
 		const user = AuthUtil.__verify_token(access_token);
 
-		req.headers.isUser = true;
+		req.headers.isUser = "USER";
 		req.user = user;
 		// 회원 처리
 		next();
