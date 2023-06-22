@@ -34,4 +34,26 @@ const bookemarkTalkie = async (talkie_id, user_id) => {
 	return talkieDao.bookemarkTalkie(talkie_id, user_id);
 };
 
-module.exports = { getTalkieCard, bookemarkTalkie };
+const deleteBookmark = async (bookmark_id, user_id) => {
+	const checkBookmark = await talkieDao.checkBookmarkById(bookmark_id);
+
+	if (!checkBookmark.length) {
+		const error = new Error(
+			"THIS_BOOKMARK_HAS_ALREADY_BEEN_DELETED_OR_CANNOT_BE_FOUND"
+		);
+		error.statusCode = 404;
+		throw error;
+	}
+
+	if (checkBookmark[0].user_id != user_id) {
+		const err = new Error("THIS_BOOKMARK_IS_OWNED_BY_SOMEONE_ELSE");
+		err.statusCode = 403;
+		throw err;
+	}
+
+	talkieDao.deleteBookmark(bookmark_id);
+
+	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
+};
+
+module.exports = { getTalkieCard, bookemarkTalkie, deleteBookmark };

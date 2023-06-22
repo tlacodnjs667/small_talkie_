@@ -14,4 +14,10 @@ router.post(
 	talkieController.bookemarkTalkie
 );
 
+router.delete(
+	"/bookmark/:bookmark_id",
+	AuthMiddleware.authorizeUser,
+	talkieController.deleteBookmark
+);
+
 module.exports = router;

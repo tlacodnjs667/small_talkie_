@@ -15,7 +15,7 @@ const getTalkieCard = catchAsync((req, res) => {
 	res.status(200).json({ data });
 });
 
-const bookemarkTalkie = (req, res) => {
+const bookemarkTalkie = async (req, res) => {
 	const { talkie_id } = req.params;
 	const { user } = req;
 
@@ -25,9 +25,24 @@ const bookemarkTalkie = (req, res) => {
 		throw error;
 	}
 
-	const { insertId } = talkieService.bookemarkTalkie(talkie_id, user.id);
+	const { insertId } = await talkieService.bookemarkTalkie(talkie_id, user.id);
 
 	res.status(201).json({ message: "BOOKMARK_CREATED" });
 };
 
-module.exports = { getTalkieCard, bookemarkTalkie };
+const deleteBookmark = async (req, res) => {
+	const { bookmark_id } = req.params;
+	const { user } = req;
+
+	if (!bookmark_id) {
+		const error = new Error("BOOKMARK_DATA_REQUIRED");
+		error.statusCode = 400;
+		throw error;
+	}
+
+	await talkieService.deleteBookmark(bookmark_id, user.id);
+
+	res.status(204).json({ message: "BOOKMARK_HAS_BEEN_DELETED" });
+};
+
+module.exports = { getTalkieCard, bookemarkTalkie, deleteBookmark };
