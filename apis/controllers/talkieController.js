@@ -1,20 +1,32 @@
 const { catchAsync } = require("../utils/globalErrorHandler");
 const talkieService = require("../services/talkieService");
 
-const getTalkieCard = catchAsync((req, res) => {
+const getTalkieCard = catchAsync(async (req, res) => {
 	const { user } = req;
 	const { offset } = req.query;
-	const { isUser } = req.headers;
+	let { isUser } = req.headers;
 
-	const data = talkieService.getTalkieCard[isUser](
+	const data = await talkieService.getTalkieCard[isUser](
 		isUser,
 		offset,
 		user.id ? user.id : null
 	);
 
-	const statusCode = data.data ? 200 : 204;
+	if (!data.length) isUser = "NO_DATA";
 
-	res.status(statusCode).json(data);
+	const Message = {
+		USER: "TALKIE_CARDS_FOR_USER_HAVE_BEEN_LOADED",
+		GUEST: "TALKIE_CARDS_FOR_GUEST_HAVE_BEEN_LOADED",
+		NO_DATA: "END_OF_DATA_REACHED",
+	};
+
+	const StatusCode = {
+		USER: 200,
+		GUEST: 200,
+		NO_DATA: 204,
+	};
+
+	res.status(StatusCode[isUser]).json({ message: Message[isUser], data });
 });
 
 const getBookmarkedTalkies = async (req, res) => {
@@ -22,7 +34,15 @@ const getBookmarkedTalkies = async (req, res) => {
 
 	const data = await talkieService.getBookmarkedTalkies(user_id);
 
-	res.status(200).json(data);
+	let message = "USER_BOOKMARK_LOADED_SUCCESSFULLY";
+	let statusCode = 200;
+
+	if (!data.data.length) {
+		statusCode = 204;
+		message = "NO_INFORMATION_MATCHED";
+	}
+
+	res.status(statusCode).json({ data, message });
 };
 
 const bookmarkTalkie = async (req, res) => {
@@ -52,7 +72,7 @@ const deleteBookmark = async (req, res) => {
 
 	await talkieService.deleteBookmark(bookmark_id, user.id);
 
-	res.status(204).json({ message: "BOOKMARK_HAS_BEEN_DELETED" });
+	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
 };
 
 module.exports = {
