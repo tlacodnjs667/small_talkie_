@@ -1,22 +1,14 @@
 const talkieDao = require("../models/talkieDao");
 
-const getTalkieCard = async (isUser, user_id, offset) => {
+const getTalkieCard = (isUser, user_id, offset) => {
 	const StrategyByMode = {
 		USER: async (isUser, offset, user_id) => {
 			const data = await talkieDao.getTalkieCard(isUser, offset, user_id);
-			const message = data
-				? "TALKIE_CARDS_FOR_USER_HAVE_BEEN_LOADED"
-				: "END_OF_INFORMATION_REACHED";
-
-			return { message, data };
+			return data;
 		},
 		GUEST: async (isUser, offset) => {
 			const data = await talkieDao.getTalkieCard(isUser, offset);
-			const message = data
-				? "TALKIE_CARDS_FOR_GUEST_HAVE_BEEN_LOADED"
-				: "END_OF_INFORMATION_REACHED";
-
-			return { message, data };
+			return data;
 		},
 	};
 
@@ -24,7 +16,7 @@ const getTalkieCard = async (isUser, user_id, offset) => {
 };
 
 const getBookmarkedTalkies = async (user_id) => {
-	return await talkieDao.getBookmarkedTalkies(user_id);
+	return talkieDao.getBookmarkedTalkies(user_id);
 };
 
 const bookmarkTalkie = async (talkie_id, user_id) => {
@@ -59,9 +51,7 @@ const deleteBookmark = async (bookmark_id, user_id) => {
 		throw err;
 	}
 
-	talkieDao.deleteBookmark(bookmark_id);
-
-	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
+	return talkieDao.deleteBookmark(bookmark_id);
 };
 
 module.exports = {

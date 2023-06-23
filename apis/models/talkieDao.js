@@ -1,6 +1,6 @@
 const { talkieDataSource } = require("./talkieDataSource");
 
-const getTalkieCard = (isUser, offset, user_id) => {
+const getTalkieCard = (isUser, offset = 0, user_id) => {
 	const QueryToGetTalkie = {
 		USER: ` 
       SELECT 
