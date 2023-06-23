@@ -2,27 +2,19 @@ const router = require("express").Router();
 const talkieController = require("../controllers/talkieController");
 const { AuthMiddleware } = require("../utils/authMiddleware");
 
-router.get(
-	"",
-	AuthMiddleware.authorizeUserOrGuest,
-	talkieController.getTalkieCard
-);
+router.get("", AuthMiddleware, talkieController.getTalkieCard);
 
-router.get(
-	"/bookmark",
-	AuthMiddleware.authorizeUser,
-	talkieController.getBookmarkedTalkies
-);
+router.get("/bookmark", AuthMiddleware, talkieController.getBookmarkedTalkies);
 
 router.post(
 	"/bookmark/:talkie_id",
-	AuthMiddleware.authorizeUser,
+	AuthMiddleware,
 	talkieController.bookmarkTalkie
 );
 
 router.delete(
 	"/bookmark/:bookmark_id",
-	AuthMiddleware.authorizeUser,
+	AuthMiddleware,
 	talkieController.deleteBookmark
 );
 
