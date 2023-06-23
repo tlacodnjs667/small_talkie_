@@ -12,8 +12,6 @@ const getTalkieCard = catchAsync(async (req, res) => {
 		user.id ? user.id : null
 	);
 
-	if (!data.length) isUser = "NO_DATA";
-
 	const Message = {
 		USER: "TALKIE_CARDS_FOR_USER_HAVE_BEEN_LOADED",
 		GUEST: "TALKIE_CARDS_FOR_GUEST_HAVE_BEEN_LOADED",
@@ -25,6 +23,8 @@ const getTalkieCard = catchAsync(async (req, res) => {
 		GUEST: 200,
 		NO_DATA: 204,
 	};
+
+	if (!data.length) isUser = "NO_DATA";
 
 	res.status(StatusCode[isUser]).json({ message: Message[isUser], data });
 });

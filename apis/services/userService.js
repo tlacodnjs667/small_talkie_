@@ -1,5 +1,5 @@
+const jwt = require("jsonwebtoken");
 const { default: axios } = require("axios");
-const { default: AuthUtil } = require("../utils/AuthUtil");
 
 const userDao = require("../models/userDao");
 
@@ -10,8 +10,8 @@ const signup = async (access_token, interest) => {
 
 	const [checkDuplicated] = await userDao.getUserInfo(kakao_client_id);
 
-	if (checkDuplicated) {
-		const authorization = AuthUtil.__sign_token(checkDuplicated);
+	if (checkDuplicated.length) {
+		const authorization = jwt.sign(checkDuplicated, process.env.JWT_SECRET_KEY);
 		const message = "ALREADY_IN_SERVICE";
 		return { message, authorization };
 		// 로그인 프로세스로 전환
@@ -39,16 +39,20 @@ const signup = async (access_token, interest) => {
 
 	userDao.addUserInterest(queryBuildForInterest);
 
-	const authorization = AuthUtil.__sign_token({
-		id: insertId,
-		nickname: profile.nickname,
-	});
+	const authorization = jwt.sign(
+		{
+			id: insertId,
+			nickname: profile.nickname,
+		},
+		process.env.JWT_SECRET_KEY
+	);
 
 	const message = "USER_CREATED";
 
 	return { message, authorization };
 };
 
+AuthUtil;
 const signin = async (access_token) => {
 	const { kakao_client_id } = await getUserInfoFromKakao(access_token);
 
@@ -59,7 +63,7 @@ const signin = async (access_token) => {
 		error.statusCode = 401;
 		throw error;
 	}
-	return AuthUtil.__sign_token(AccountInfo);
+	return jwt.sign(AccountInfo, process.env.JWT_SECRET_KEY);
 	// 회원 정보 수정에 관한 결정 여부
 };
 
