@@ -1,7 +1,7 @@
-import { catchAsync } from "./globalErrorHandler";
+const { catchAsync } = require("./globalErrorHandler");
 const jwt = require("jsonwebtoken");
 
-export const AuthMiddleware = catchAsync(async (req, res, next) => {
+const AuthMiddleware = catchAsync(async (req, res, next) => {
 	const { access_token, isUser = "USER" } = req.headers;
 
 	await AuthenticationByMode[isUser](access_token);
@@ -27,3 +27,5 @@ const AuthenticationByMode = {
 		console.log("GUEST_ENTERED");
 	},
 };
+
+module.exports = AuthMiddleware;

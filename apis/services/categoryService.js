@@ -1,7 +1,24 @@
 const categoryDao = require("../models/categoryDao");
 
-const getTopicsForCategory = (start) => {
-	return categoryDao.getTopicsForCategory(start);
+const getTopicsForSignUp = (start) => {
+	return categoryDao.getTopicsForSignUp(start);
 };
 
-module.exports = { getTopicsForCategory };
+const getInterestCategory = async (user_id) => {
+	const data = await categoryDao.getInterestCategory(user_id);
+
+	if (data.length) {
+		return {
+			status: 200,
+			data,
+		};
+	} else return { status: 204 };
+};
+
+const modifyUserInterest = async () => {};
+
+module.exports = {
+	getTopicsForSignUp,
+	getInterestCategory,
+	modifyUserInterest,
+};

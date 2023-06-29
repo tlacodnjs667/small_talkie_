@@ -52,7 +52,6 @@ const signup = async (access_token, interest) => {
 	return { message, authorization };
 };
 
-AuthUtil;
 const signin = async (access_token) => {
 	const { kakao_client_id } = await getUserInfoFromKakao(access_token);
 
