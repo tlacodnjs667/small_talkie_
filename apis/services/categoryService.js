@@ -1,29 +1,17 @@
 const categoryDao = require("../models/categoryDao");
 
-const CONDITION_ENUM = Object.freeze({
-	TOPIC: "TOPIC",
-	USER: "USER",
-	ALL: "ALL",
-});
-
 const getTopicsForSignUp = (start) => {
-	return categoryDao.getTopicsForSignUp(start);
+	return categoryDao.getTopicsForSignUp("SIGN_UP", start);
 };
 
-const getInterestCategory = async (user_id) => {
+const getTopicCategory = async (user_id) => {
 	const result = {
 		status: null,
 		data: null,
 	};
 
-	result.data = await categoryDao.getInterestCategoryByUserOrTopic(
-		CONDITION_ENUM.USER,
-		user_id
-	);
-
-	if (result.data.length) result.status = 200;
-	else result.status = 204;
-
+	// user의 Interest category들이 상위로 가는 토픽 리스트 만들어야 함.
+	result.data = await categoryDao.getTopics("LIST");
 	return result;
 };
 
@@ -34,7 +22,7 @@ const modifyUserInterest = async (user_id, topic_id) => {
 	};
 
 	const checkUserInterest = await categoryDao.getInterestCategoryByUserOrTopic(
-		CONDITION_ENUM.ALL,
+		"ALL",
 		user_id,
 		topic_id
 	);
@@ -45,10 +33,7 @@ const modifyUserInterest = async (user_id, topic_id) => {
 		result.status = 204;
 	} else {
 		const checkUserInterestCNT =
-			await categoryDao.getInterestCategoryByUserOrTopic(
-				CONDITION_ENUM.USER,
-				user_id
-			);
+			await categoryDao.getInterestCategoryByUserOrTopic("USER", user_id);
 
 		if (checkUserInterestCNT.length == 5) {
 			const err = new Error("EXCEEDED_MAXIMUM_SIZE");
@@ -65,8 +50,18 @@ const modifyUserInterest = async (user_id, topic_id) => {
 	return result;
 };
 
+const getSituationCategoryList = () => {
+	return categoryDao.getSituationCategoryList();
+};
+
+const getEncounterCategoryListBySituation = (situation_id) => {
+	return categoryDao.getEncounterCategoryListBySituation(situation_id);
+};
+
 module.exports = {
 	getTopicsForSignUp,
-	getInterestCategory,
+	getTopicCategory,
 	modifyUserInterest,
+	getSituationCategoryList,
+	getEncounterCategoryListBySituation,
 };

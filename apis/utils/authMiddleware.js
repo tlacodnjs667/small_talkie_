@@ -19,7 +19,7 @@ const AuthenticationByMode = {
 		}
 
 		const user = jwt.verify(access_token, process.env.JWT_SECRET_KEY);
-		// AuthUtil.__verify_token(access_token);
+
 		req.user = user;
 	},
 
