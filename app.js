@@ -15,8 +15,9 @@ app.use(morgan("combined"));
 app.use(router);
 
 app.post("/ping", (req, res) => {
-	console.log(req.body);
-	res.status(200).json({ message: "pong" });
+	const status = 200;
+	const message = "PONG";
+	res.status(status).json({ message: message });
 });
 
 app.use(globalErrorHandler);

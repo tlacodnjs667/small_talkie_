@@ -21,9 +21,9 @@ const modifyUserInterest = catchAsync(async (req, res) => {
 	const { id: user_id } = req.user;
 	const { topic_id } = req.body;
 
-	await categoryService.modifyUserInterest();
+	const result = await categoryService.modifyUserInterest(user_id, topic_id);
 
-	res.status(204);
+	res.status(result.status).json({ message: result.message });
 });
 
 module.exports = {
