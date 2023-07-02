@@ -1,30 +1,14 @@
 const { talkieDataSource } = require("./talkieDataSource");
 
-const getTopics = (condition, start = 0) => {
-	/**
-	 * CONDITION [SIGN_UP, LIST] 에 따라 반환하는 정보 다르게 처리
-	 * 1. Sign_up 상황에서 사용할 경우, start 인자를 포함하여 요청 보낼 수 있음. 없을 경우 초기값 0
-	 * 2. LIST 상황에서 사용할 경우에는,
-	 */
-	const queryByCondition = {
-		SIGN_UP: ["", `LIMIT 7 OFFSET ${start}`],
-		LIST: [
-			`, COUNT(topic_id) AS checkInterest`,
-			`LEFT JOIN user_interest ON user_interest.topic_id = topic_category.id
-      GROUP BY topic_category
-      ORDER BY checkInterest DESC, topic ASC
-    `,
-		],
-	};
-
+const getTopicsForSignUp = (start = 0) => {
 	return talkieDataSource.query(`
       SELECT
-        id, 
+        id AS topic_id, 
         topic,
         emoji
-        ${queryByCondition[condition][0]}
       FROM topic_category
-      ${queryByCondition[condition][1]}
+      ORDER BY topic
+      LIMIT 7 OFFSET ${start}
   `);
 };
 
@@ -80,7 +64,7 @@ const deleteInterest = (user_id, topic_id) => {
 const getSituationCategoryList = () => {
 	return talkieDataSource.query(`
     SELECT 
-      id,
+      id AS situation_id,
       situation,
       emoji
     FROM situation_category
@@ -106,11 +90,38 @@ const getEncounterCategoryListBySituation = (situation_id) => {
   `);
 };
 
+const getTopicCategory = (mode, user_id) => {
+	const QueryDiversityByMode = {
+		GUEST: `
+    SELECT
+      id AS topic_id,
+      topic,
+      emoji
+    FROM topic_category
+    ORDER BY topic ASC
+  `,
+		USER: `
+      SELECT
+        topic_category.id AS topic_id,
+        topic,
+        emoji,
+        IF(IS NULL(user_interest.id), 0, 1) AS interest_check
+      FROM topic_category
+      LEFT JOIN user_interest 
+        ON user_id = ${user_id} AND user_interest.topic_id = topic_category.id
+      ORDER BY InterestCheck DESC, topic ASC
+  `,
+	};
+
+	return talkieDataSource.query(QueryDiversityByMode[mode]);
+};
+
 module.exports = {
-	getTopics,
+	getTopicsForSignUp,
 	getInterestCategoryByUserOrTopic,
 	insertInterest,
 	deleteInterest,
 	getSituationCategoryList,
 	getEncounterCategoryListBySituation,
+	getTopicCategory,
 };
