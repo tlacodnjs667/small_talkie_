@@ -42,10 +42,20 @@ const getEncounterCategoryListBySituation = catchAsync(async (req, res) => {
 	res.status(200).json({ data });
 });
 
+const getTopicCategory = catchAsync(async (req, res) => {
+	const { id: user_id } = req.user;
+	const isUser = req.header;
+
+	const data = await categoryService.getTopicCategory(isUser, user_id);
+
+	res.status(200).json({ data });
+});
+
 module.exports = {
 	getTopicsForSignUp,
 	getInterestCategory,
 	modifyUserInterest,
 	getSituationCategoryList,
 	getEncounterCategoryListBySituation,
+	getTopicCategory,
 };

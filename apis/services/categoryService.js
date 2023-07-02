@@ -1,17 +1,23 @@
 const categoryDao = require("../models/categoryDao");
 
 const getTopicsForSignUp = (start) => {
-	return categoryDao.getTopicsForSignUp("SIGN_UP", start);
+	return categoryDao.getTopicsForSignUp(start);
 };
 
-const getTopicCategory = async (user_id) => {
+const getInterestCategory = async (user_id) => {
 	const result = {
-		status: null,
+		status: 200,
 		data: null,
 	};
 
 	// user의 Interest category들이 상위로 가는 토픽 리스트 만들어야 함.
-	result.data = await categoryDao.getTopics("LIST");
+	result.data = await categoryDao.getInterestCategoryByUserOrTopic(
+		"USER",
+		user_id
+	);
+
+	if (!result.data.length) result.status = 204;
+
 	return result;
 };
 
@@ -58,10 +64,15 @@ const getEncounterCategoryListBySituation = (situation_id) => {
 	return categoryDao.getEncounterCategoryListBySituation(situation_id);
 };
 
+const getTopicCategory = (mode, user_id) => {
+	return categoryDao.getTopicCategory(mode, user_id);
+};
+
 module.exports = {
 	getTopicsForSignUp,
-	getTopicCategory,
+	getInterestCategory,
 	modifyUserInterest,
 	getSituationCategoryList,
 	getEncounterCategoryListBySituation,
+	getTopicCategory,
 };
