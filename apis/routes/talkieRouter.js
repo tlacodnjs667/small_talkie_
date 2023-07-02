@@ -1,6 +1,8 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
+
 const talkieController = require("../controllers/talkieController");
-const { AuthMiddleware } = require("../utils/authMiddleware");
+const AuthMiddleware = require("../utils/authMiddleware");
 
 router.get("", AuthMiddleware, talkieController.getTalkieCard);
 

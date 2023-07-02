@@ -60,7 +60,7 @@ const bookmarkTalkie = async (req, res) => {
 	res.status(201).json({ message: "BOOKMARK_CREATED" });
 };
 
-const deleteBookmark = async (req, res) => {
+const deleteBookmark = catchAsync(async (req, res) => {
 	const { bookmark_id } = req.params;
 	const { user } = req;
 
@@ -73,7 +73,7 @@ const deleteBookmark = async (req, res) => {
 	await talkieService.deleteBookmark(bookmark_id, user.id);
 
 	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
-};
+});
 
 module.exports = {
 	getTalkieCard,

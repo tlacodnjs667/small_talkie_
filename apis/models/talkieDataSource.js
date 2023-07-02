@@ -1,5 +1,5 @@
 const { DataSource } = require("typeorm");
-
+require("dotenv").config();
 const talkieDataSource = new DataSource({
 	type: process.env.TYPEORM_CONNECTION,
 	port: process.env.TYPEORM_PORT,
