@@ -85,6 +85,28 @@ const deleteBookmark = (bookmark_id) => {
   `);
 };
 
+const getTalkieCardByEncounter = (mode, user, encounter_id) => {
+	const QuryByMode = {
+		GUEST: `
+    SELECT
+      id,
+      talk,
+      emoji
+    FROM small_talks
+    LEFT JOIN encounter_talk ON small_talks.id = encounter_id = ${encounter_id}
+  `,
+		USER: ``,
+	};
+
+	return talkieDataSource.query(QuryByMode[mode]);
+};
+
+const getTalkieCardByTopic = () => {
+	return talkieDataSource.query(`
+  
+  `);
+};
+
 module.exports = {
 	getTalkieCard,
 	getBookmarkedTalkies,
@@ -92,4 +114,6 @@ module.exports = {
 	checkBookmarkByUserAndTalkie,
 	bookmarkTalkie,
 	deleteBookmark,
+	getTalkieCardByEncounter,
+	getTalkieCardByTopic,
 };

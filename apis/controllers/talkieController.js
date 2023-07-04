@@ -75,9 +75,18 @@ const deleteBookmark = catchAsync(async (req, res) => {
 	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
 });
 
+const getTalkieCardByEncounter = catchAsync((req, res) => {
+	const { encounter_id } = req.params;
+	const { isUser, user } = req.headers;
+});
+
+const getTalkieCardByTopic = catchAsync((req, res) => {});
+
 module.exports = {
 	getTalkieCard,
 	getBookmarkedTalkies,
 	bookmarkTalkie,
 	deleteBookmark,
+	getTalkieCardByEncounter,
+	getTalkieCardByTopic,
 };

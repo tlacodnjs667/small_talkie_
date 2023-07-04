@@ -54,9 +54,18 @@ const deleteBookmark = async (bookmark_id, user_id) => {
 	return talkieDao.deleteBookmark(bookmark_id);
 };
 
+const getTalkieCardByEncounter = async (mode, user, encounter_id) => {
+	const data = await talkieDao.getTalkieCardByEncounter(
+		mode,
+		user,
+		encounter_id
+	);
+};
+
 module.exports = {
 	getTalkieCard,
 	getBookmarkedTalkies,
 	bookmarkTalkie,
 	deleteBookmark,
+	getTalkieCardByEncounter,
 };
