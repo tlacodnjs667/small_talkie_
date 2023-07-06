@@ -75,12 +75,36 @@ const deleteBookmark = catchAsync(async (req, res) => {
 	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
 });
 
-const getTalkieCardByEncounter = catchAsync((req, res) => {
+const getTalkieCardByEncounter = catchAsync(async (req, res) => {
 	const { encounter_id } = req.params;
-	const { isUser, user } = req.headers;
+	const { isUser } = req.headers;
+	const { id: user_id } = req.user;
+
+	const data = await talkieService.getTalkieCardByEncounter(
+		isUser,
+		user_id,
+		encounter_id
+	);
+
+	res.status(200).json({ data });
 });
 
-const getTalkieCardByTopic = catchAsync((req, res) => {});
+const getTalkieCardByTopic = catchAsync(async (req, res) => {
+	// topic_id 를 받으면 토픽에 해당하는 talkie 리스트 반환하는 API
+	// topic 추천 5개도 보내야하는데... Left join을 쓰는 게 나을 까 각각 DB 연결을 따로 하는 게 좋을까?
+
+	const { isUser } = req.headers;
+	const { id: user_id } = req.user;
+	const { topic_id } = req.params;
+
+	const data = await talkieService.getTalkieCardByTopic(
+		isUser,
+		user_id,
+		topic_id
+	);
+
+	res.status(200).json({ data });
+});
 
 module.exports = {
 	getTalkieCard,

@@ -85,17 +85,46 @@ const deleteBookmark = (bookmark_id) => {
   `);
 };
 
-const getTalkieCardByEncounter = (mode, user, encounter_id) => {
+// 고민이 필
+const getTalkieCardByEncounter = (mode, user_id, encounter_id) => {
 	const QuryByMode = {
 		GUEST: `
-    SELECT
-      id,
-      talk,
-      emoji
-    FROM small_talks
-    LEFT JOIN encounter_talk ON small_talks.id = encounter_id = ${encounter_id}
+      SELECT
+        encounter_category.id AS encounter_id,
+        encounter,
+        encounter_category.emoji AS encounter_emoji,
+        JSON_ARRAYAGG(
+          JSON_OBJECT(
+            "talkie_id", small_talks.id,
+            "talkie", talk,
+            "talkie_emoji", small_talks.emoji,
+            "isSaved", IFNULL(0, 1)
+          )
+        ) AS talkies
+      FROM encounter_category
+      LEFT JOIN encounter_talk ON encounter_category.id = encounter_talk.encounter_id
+      LEFT JOIN small_talks ON encounter_talk.talk_id = small_talks.id
+      GROUP BY encounter_category.id;
   `,
-		USER: ``,
+		USER: `
+      SELECT
+        encounter_category.id AS encounter_id,
+        encounter,
+        encounter_category.emoji AS encounter_emoji,
+        JSON_ARRAYAGG(
+          JSON_OBJECT(
+            "talkie_id", small_talks.id,
+            "talkie", talk,
+            "talkie_emoji", small_talks.emoji,
+            "isSaved", IFNULL(0, 1)
+          )
+        ) AS talkies
+      FROM encounter_category
+      LEFT JOIN encounter_talk ON encounter_category.id = encounter_talk.encounter_id
+      LEFT JOIN small_talks ON small_talks.id = encounter_talk.talk_id
+      LEFT JOIN saved_questions  ON saved_questions.talk_id = small_talks.id AND user_id = ${user_id}
+      GROUP BY encounter_category.id;
+    `,
 	};
 
 	return talkieDataSource.query(QuryByMode[mode]);

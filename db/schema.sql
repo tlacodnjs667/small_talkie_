@@ -19,7 +19,10 @@ CREATE TABLE `encounter_category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `encounter` varchar(50) NOT NULL,
   `emoji` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `situation_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `situation_id` (`situation_id`),
+  CONSTRAINT `encounter_category_ibfk_1` FOREIGN KEY (`situation_id`) REFERENCES `situation_category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -179,5 +182,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20230612082751'),
   ('20230612082754'),
   ('20230612082810'),
-  ('20230612082824');
+  ('20230612082824'),
+  ('20230704110752');
 UNLOCK TABLES;
