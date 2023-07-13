@@ -110,7 +110,19 @@ const getTopicCategory = (mode, user_id) => {
       LEFT JOIN user_interest 
         ON user_id = ${user_id} AND user_interest.topic_id = topic_category.id
       ORDER BY InterestCheck DESC, topic ASC
-  `,
+      `,
+		RECOMMEND: `
+      SELECT
+        topic_category.id AS topic_id,
+        topic,
+        emoji,
+        COUNT(user_interest.id) AS interestedCnt
+      FROM topic_category
+      LEFT JOIN user_interest ON user_interest.topic_id = topic_category.id
+      GROUP BY topic_category.id
+      ORDER BY interestedCnt DESC, topic ASC
+      LIMIT 5 OFFSET ${Math.floor(Math.random() * 20)}
+    `,
 	};
 
 	return talkieDataSource.query(QueryDiversityByMode[mode]);

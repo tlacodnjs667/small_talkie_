@@ -20,4 +20,16 @@ router.delete(
 	talkieController.deleteBookmark
 );
 
+router.get(
+	"/encounter/:encounter_id",
+	AuthMiddleware,
+	talkieController.getTalkieCardByEncounter
+);
+
+router.get(
+	"/topic/:topic_id",
+	AuthMiddleware,
+	talkieController.getTalkieCardByTopic
+);
+
 module.exports = router;

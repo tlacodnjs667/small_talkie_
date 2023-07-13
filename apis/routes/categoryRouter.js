@@ -16,6 +16,6 @@ router.get(
 	categoryController.getEncounterCategoryListBySituation
 );
 
-router.get("/topic", AuthMiddleware, categoryController);
+router.get("/topic", AuthMiddleware, categoryController.getTopicCategory);
 
 module.exports = router;

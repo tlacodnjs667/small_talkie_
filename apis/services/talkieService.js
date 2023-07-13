@@ -1,4 +1,5 @@
 const talkieDao = require("../models/talkieDao");
+const categoryDao = require("../models/categoryDao");
 
 const getTalkieCard = (isUser, user_id, offset) => {
 	const StrategyByMode = {
@@ -54,9 +55,29 @@ const deleteBookmark = async (bookmark_id, user_id) => {
 	return talkieDao.deleteBookmark(bookmark_id);
 };
 
+const getTalkieCardByEncounter = async (mode, encounter_id, start, user_id) => {
+	const data = await talkieDao.getTalkieCardByEncounter(
+		mode,
+		encounter_id,
+		start,
+		user_id
+	);
+
+	return data;
+};
+
+const getTalkieCardByTopic = async (mode, topic_id, start, user_id) => {
+	const topics = await categoryDao.getTopicCategory("RECOMMEND");
+	const talkie = talkieDao.getTalkieCardByTopic(mode, topic_id, start, user_id);
+
+	return { topics, talkie };
+};
+
 module.exports = {
 	getTalkieCard,
 	getBookmarkedTalkies,
 	bookmarkTalkie,
 	deleteBookmark,
+	getTalkieCardByEncounter,
+	getTalkieCardByTopic,
 };
