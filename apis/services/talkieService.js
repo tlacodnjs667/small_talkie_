@@ -55,20 +55,22 @@ const deleteBookmark = async (bookmark_id, user_id) => {
 	return talkieDao.deleteBookmark(bookmark_id);
 };
 
-const getTalkieCardByEncounter = async (mode, user_id, encounter_id) => {
+const getTalkieCardByEncounter = async (mode, encounter_id, start, user_id) => {
 	const data = await talkieDao.getTalkieCardByEncounter(
 		mode,
-		user_id,
-		encounter_id
+		encounter_id,
+		start,
+		user_id
 	);
 
 	return data;
 };
 
-const getTalkieCardByTopic = async (mode, user_id, topic_id) => {
-	const talkie = talkieDao.getTalkieCardByTopic(mode, user_id, topic_id);
+const getTalkieCardByTopic = async (mode, topic_id, start, user_id) => {
+	const topics = await categoryDao.getTopicCategory("RECOMMEND");
+	const talkie = talkieDao.getTalkieCardByTopic(mode, topic_id, start, user_id);
 
-	const topics = await categoryDao.getTopicCategory();
+	return { topics, talkie };
 };
 
 module.exports = {

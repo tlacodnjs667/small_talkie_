@@ -86,8 +86,8 @@ const deleteBookmark = (bookmark_id) => {
 };
 
 // 고민이 필
-const getTalkieCardByEncounter = (mode, user_id, encounter_id) => {
-	const QuryByMode = {
+const getTalkieCardByEncounter = (mode, encounter_id, start = 0, user_id) => {
+	const QueryByMode = {
 		GUEST: `
       SELECT
         encounter_category.id AS encounter_id,
@@ -97,14 +97,15 @@ const getTalkieCardByEncounter = (mode, user_id, encounter_id) => {
           JSON_OBJECT(
             "talkie_id", small_talks.id,
             "talkie", talk,
-            "talkie_emoji", small_talks.emoji,
-            "isSaved", IFNULL(0, 1)
+            "talkie_emoji", small_talks.emoji
           )
         ) AS talkies
       FROM encounter_category
       LEFT JOIN encounter_talk ON encounter_category.id = encounter_talk.encounter_id
       LEFT JOIN small_talks ON encounter_talk.talk_id = small_talks.id
-      GROUP BY encounter_category.id;
+      WHERE encounter_category.id = ${encounter_id}
+      GROUP BY encounter_category.id
+      LIMIT 7 OFFSET ${start};
   `,
 		USER: `
       SELECT
@@ -123,17 +124,60 @@ const getTalkieCardByEncounter = (mode, user_id, encounter_id) => {
       LEFT JOIN encounter_talk ON encounter_category.id = encounter_talk.encounter_id
       LEFT JOIN small_talks ON small_talks.id = encounter_talk.talk_id
       LEFT JOIN saved_questions  ON saved_questions.talk_id = small_talks.id AND user_id = ${user_id}
-      GROUP BY encounter_category.id;
+      WHERE encounter_category.id = ${encounter_id}
+      GROUP BY encounter_category.id
+      LIMIT 7 OFFSET ${start};
     `,
 	};
 
-	return talkieDataSource.query(QuryByMode[mode]);
+	return talkieDataSource.query(QueryByMode[mode]);
 };
 
-const getTalkieCardByTopic = () => {
-	return talkieDataSource.query(`
-  
-  `);
+const getTalkieCardByTopic = (mode, topic_id, start, user_id) => {
+	const QueryByMode = {
+		GUEST: `
+      SELECT
+        topic_category.id AS topic_id,
+        topic_category.topic,
+        topic_category.emoji AS topic_emoji,
+        JSON_ARRAYAGG(
+          JSON_OBJECT(
+            "talkie_id", small_talks.id,
+            "talkie", talk,
+            "talkie_emoji", small_talks.emoji
+          )
+        ) AS talkies
+      FROM topic_category
+      LEFT JOIN topic_talk ON topic_category.id = topic_talk.topic_id
+      LEFT JOIN small_talks ON small_talks.id = topic_talk.talk_id
+      WHERE topic_category.id = ${topic_id}
+      GROUP BY topic_category.id
+      LIMIT 7 OFFSET ${start}
+    `,
+		USER: `
+      SELECT 
+      topic_category.id AS topic_id,
+      topic_category.topic,
+      topic_category.emoji AS topic_emoji,
+      JSON_ARRAYAGG(
+        JSON_OBJECT(
+          "talkie_id", small_talks.id,
+          "talkie", talk,
+          "talkie_emoji", small_talks.emoji,
+          "isSaved", IFNULL(0, 1)
+        )
+      ) AS talkies
+      FROM topic_category
+      LEFT JOIN topic_talk ON topic_category.id = topic_talk.topic_id
+      LEFT JOIN small_talks ON small_talks.id = topic_talk.talk_id
+      LEFT JOIN saved_questions ON small_talks.id = saved_questions.talk_id AND user_id = ${user_id}
+      WHERE topic_category.id = ${topic_id}
+      GROUP BY topic_category.id
+      LIMIT 7 OFFSET ${start}
+    `,
+	};
+
+	return talkieDataSource.query(QueryByMode[mode]);
 };
 
 module.exports = {

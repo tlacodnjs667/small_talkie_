@@ -76,14 +76,16 @@ const deleteBookmark = catchAsync(async (req, res) => {
 });
 
 const getTalkieCardByEncounter = catchAsync(async (req, res) => {
-	const { encounter_id } = req.params;
 	const { isUser } = req.headers;
 	const { id: user_id } = req.user;
+	const { encounter_id } = req.params;
+	const { start } = req.query;
 
 	const data = await talkieService.getTalkieCardByEncounter(
 		isUser,
-		user_id,
-		encounter_id
+		encounter_id,
+		start,
+		user_id
 	);
 
 	res.status(200).json({ data });
@@ -96,11 +98,13 @@ const getTalkieCardByTopic = catchAsync(async (req, res) => {
 	const { isUser } = req.headers;
 	const { id: user_id } = req.user;
 	const { topic_id } = req.params;
+	const { start } = req.query;
 
 	const data = await talkieService.getTalkieCardByTopic(
 		isUser,
-		user_id,
-		topic_id
+		topic_id,
+		start,
+		user_id
 	);
 
 	res.status(200).json({ data });
