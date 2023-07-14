@@ -1,8 +1,10 @@
 -- migrate:up
 CREATE TABLE user_interest (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    topic_id INT NOT NULL REFERENCES topic_category (id),
-    user_id INT NOT NULL REFERENCES users (id)
+    interest_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    topic_fk INT NOT NULL,
+    user_fk INT NOT NULL,
+    FOREIGN KEY (topic_fk) REFERENCES topic_category(topic_id),
+    FOREIGN KEY (user_fk) REFERENCES users(user_id)
 );
 
 -- migrate:down
