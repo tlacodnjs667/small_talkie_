@@ -9,6 +9,10 @@ const AuthMiddleware = catchAsync(async (req, res, next) => {
 });
 
 const AuthenticationByMode = {
+	/**
+	 * @param {*} access_token
+	 * access_token : { user_id, nickname }
+	 */
 	USER: (access_token) => {
 		console.log("USER_ENTERED");
 
