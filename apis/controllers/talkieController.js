@@ -2,14 +2,14 @@ const { catchAsync } = require("../utils/globalErrorHandler");
 const talkieService = require("../services/talkieService");
 
 const getTalkieCard = catchAsync(async (req, res) => {
-	const { user } = req;
+	const { user_id } = req.user;
 	const { offset } = req.query;
 	let { isUser } = req.headers;
 
 	const data = await talkieService.getTalkieCard[isUser](
 		isUser,
 		offset,
-		user.id ? user.id : null
+		user_id ? user_id : null
 	);
 
 	const Message = {
@@ -30,7 +30,7 @@ const getTalkieCard = catchAsync(async (req, res) => {
 });
 
 const getBookmarkedTalkies = async (req, res) => {
-	const { id: user_id } = req.user;
+	const { user_id } = req.user;
 
 	const data = await talkieService.getBookmarkedTalkies(user_id);
 
@@ -47,7 +47,7 @@ const getBookmarkedTalkies = async (req, res) => {
 
 const bookmarkTalkie = async (req, res) => {
 	const { talkie_id } = req.params;
-	const { user } = req;
+	const { user_id } = req.user;
 
 	if (!talkie_id) {
 		const error = new Error("TALKIE_DATA_REQUIRED");
@@ -55,14 +55,14 @@ const bookmarkTalkie = async (req, res) => {
 		throw error;
 	}
 
-	const { insertId } = await talkieService.bookmarkTalkie(talkie_id, user.id);
+	const { insertId } = await talkieService.bookmarkTalkie(talkie_id, user_id);
 
 	res.status(201).json({ message: "BOOKMARK_CREATED" });
 };
 
 const deleteBookmark = catchAsync(async (req, res) => {
 	const { bookmark_id } = req.params;
-	const { user } = req;
+	const { user_id } = req.user;
 
 	if (!bookmark_id) {
 		const error = new Error("BOOKMARK_DATA_REQUIRED");
@@ -70,14 +70,14 @@ const deleteBookmark = catchAsync(async (req, res) => {
 		throw error;
 	}
 
-	await talkieService.deleteBookmark(bookmark_id, user.id);
+	await talkieService.deleteBookmark(bookmark_id, user_id);
 
 	res.status(204).json({ message: "DELETION_COMPLETED_SUCCESSFULLY" });
 });
 
 const getTalkieCardByEncounter = catchAsync(async (req, res) => {
 	const { isUser } = req.headers;
-	const { id: user_id } = req.user;
+	const { user_id } = req.user;
 	const { encounter_id } = req.params;
 	const { start } = req.query;
 
@@ -96,7 +96,7 @@ const getTalkieCardByTopic = catchAsync(async (req, res) => {
 	// topic 추천 5개도 보내야하는데... Left join을 쓰는 게 나을 까 각각 DB 연결을 따로 하는 게 좋을까?
 
 	const { isUser } = req.headers;
-	const { id: user_id } = req.user;
+	const { user_id } = req.user;
 	const { topic_id } = req.params;
 	const { start } = req.query;
 

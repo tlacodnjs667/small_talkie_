@@ -1,0 +1,13 @@
+users : user_id (pk) | kakao_client | nickname | email
+
+situation_category : situation_id (pk) | situation | situation_emoji
+encounter_category : encounter_id (pk) | encounter | encounter_emoji | situation_fk
+
+topic_category : topic_id (pk) | topic | topic_emoji 
+
+small_talkies : talkie_id (pk) | talkie 
+
+encounter_talkie : id (pk) | encounter_fk | talkie_fk
+topic_talk : id (pk) | topic_fk | talkie_fk
+bookmarks : bookmark_id (pk) | talkie_fk | user_fk
+user_interest : interest_id (pk) | topic_fk | user_fk
