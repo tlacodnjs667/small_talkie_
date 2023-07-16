@@ -10,47 +10,55 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `bookmarks`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bookmarks` (
+  `bookmark_id` int NOT NULL AUTO_INCREMENT,
+  `talkie_fk` int NOT NULL,
+  `user_fk` int NOT NULL,
+  PRIMARY KEY (`bookmark_id`),
+  KEY `talkie_fk` (`talkie_fk`),
+  KEY `user_fk` (`user_fk`),
+  CONSTRAINT `bookmarks_ibfk_1` FOREIGN KEY (`talkie_fk`) REFERENCES `small_talkies` (`talkie_id`),
+  CONSTRAINT `bookmarks_ibfk_2` FOREIGN KEY (`user_fk`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `encounter_category`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `encounter_category` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `encounter_id` int NOT NULL AUTO_INCREMENT,
   `encounter` varchar(50) NOT NULL,
-  `emoji` varchar(60) DEFAULT NULL,
-  `situation_id` int NOT NULL,
+  `encounter_emoji` varchar(60) DEFAULT NULL,
+  `situation_fk` int NOT NULL,
+  PRIMARY KEY (`encounter_id`),
+  KEY `situation_fk` (`situation_fk`),
+  CONSTRAINT `encounter_category_ibfk_1` FOREIGN KEY (`situation_fk`) REFERENCES `situation_category` (`situation_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `encounter_talkie`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `encounter_talkie` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `encounter_fk` int NOT NULL,
+  `talkie_fk` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `situation_id` (`situation_id`),
-  CONSTRAINT `encounter_category_ibfk_1` FOREIGN KEY (`situation_id`) REFERENCES `situation_category` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `encounter_talk`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `encounter_talk` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `encounter_id` int NOT NULL,
-  `talk_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `saved_questions`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `saved_questions` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `talk_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`id`)
+  KEY `encounter_fk` (`encounter_fk`),
+  KEY `talkie_fk` (`talkie_fk`),
+  CONSTRAINT `encounter_talkie_ibfk_1` FOREIGN KEY (`encounter_fk`) REFERENCES `encounter_category` (`encounter_id`),
+  CONSTRAINT `encounter_talkie_ibfk_2` FOREIGN KEY (`talkie_fk`) REFERENCES `small_talkies` (`talkie_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -73,24 +81,23 @@ CREATE TABLE `schema_migrations` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `situation_category` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `situation_id` int NOT NULL AUTO_INCREMENT,
   `situation` varchar(40) NOT NULL,
-  `emoji` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `situation_emoji` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`situation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `small_talks`
+-- Table structure for table `small_talkies`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `small_talks` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `talk` varchar(100) NOT NULL,
-  `emoji` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `small_talkies` (
+  `talkie_id` int NOT NULL AUTO_INCREMENT,
+  `talkie` varchar(100) NOT NULL,
+  PRIMARY KEY (`talkie_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -101,10 +108,10 @@ CREATE TABLE `small_talks` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `topic_category` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `topic_id` int NOT NULL AUTO_INCREMENT,
   `topic` varchar(40) NOT NULL,
-  `emoji` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `topic_emoji` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,9 +123,13 @@ CREATE TABLE `topic_category` (
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `topic_talk` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `topic_id` int NOT NULL,
-  `talk_id` int NOT NULL,
-  PRIMARY KEY (`id`)
+  `topic_fk` int NOT NULL,
+  `talkie_fk` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `topic_fk` (`topic_fk`),
+  KEY `talkie_fk` (`talkie_fk`),
+  CONSTRAINT `topic_talk_ibfk_1` FOREIGN KEY (`topic_fk`) REFERENCES `topic_category` (`topic_id`),
+  CONSTRAINT `topic_talk_ibfk_2` FOREIGN KEY (`talkie_fk`) REFERENCES `small_talkies` (`talkie_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -129,10 +140,14 @@ CREATE TABLE `topic_talk` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_interest` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `topic_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`id`)
+  `interest_id` int NOT NULL AUTO_INCREMENT,
+  `topic_fk` int NOT NULL,
+  `user_fk` int NOT NULL,
+  PRIMARY KEY (`interest_id`),
+  KEY `topic_fk` (`topic_fk`),
+  KEY `user_fk` (`user_fk`),
+  CONSTRAINT `user_interest_ibfk_1` FOREIGN KEY (`topic_fk`) REFERENCES `topic_category` (`topic_id`),
+  CONSTRAINT `user_interest_ibfk_2` FOREIGN KEY (`user_fk`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -143,11 +158,12 @@ CREATE TABLE `user_interest` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `kakao_client` varchar(30) NOT NULL,
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `kakao_client` varchar(100) NOT NULL,
   `nickname` varchar(30) DEFAULT NULL,
-  `email` varchar(40) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `email` varchar(50) DEFAULT NULL,
+  `darkmode` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -183,5 +199,5 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20230612082754'),
   ('20230612082810'),
   ('20230612082824'),
-  ('20230704110752');
+  ('20230714065552');
 UNLOCK TABLES;

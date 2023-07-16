@@ -1,8 +1,10 @@
 -- migrate:up
-CREATE TABLE saved_questions (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    talk_id INT NOT NULL REFERENCES small_talks (id),
-    user_id INT NOT NULL REFERENCES users (id)
+CREATE TABLE bookmarks (
+    bookmark_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    talkie_fk INT NOT NULL,
+    user_fk INT NOT NULL,
+    FOREIGN KEY (talkie_fk) REFERENCES small_talkies(talkie_id),
+    FOREIGN KEY (user_fk) REFERENCES users(user_id)
 );
 
 -- migrate:down

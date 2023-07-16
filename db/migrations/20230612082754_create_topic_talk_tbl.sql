@@ -1,8 +1,10 @@
 -- migrate:up
 CREATE TABLE topic_talk (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    topic_id INT NOT NULL REFERENCES topic_category (id),
-    talk_id INT NOT NULL REFERENCES small_talks (id)
+    topic_fk INT NOT NULL,
+    talkie_fk INT NOT NULL,
+    FOREIGN KEY (topic_fk) REFERENCES topic_category(topic_id),
+    FOREIGN KEY (talkie_fk) REFERENCES small_talkies(talkie_id)
 )
 
 -- migrate:down
