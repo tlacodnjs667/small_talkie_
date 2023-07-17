@@ -3,9 +3,9 @@ const { talkieDataSource } = require("./talkieDataSource");
 const getTopicsForSignUp = (start = 0) => {
 	return talkieDataSource.query(`
       SELECT
-        id AS topic_id, 
+        topic_id, 
         topic,
-        emoji
+        topic_emoji
       FROM topic_category
       ORDER BY topic
       LIMIT 7 OFFSET ${start}
@@ -26,18 +26,18 @@ const getInterestCategoryByUserOrTopic = (condition, id1, id2) => {
   */
 
 	const whereCla = Object.freeze({
-		ALL: `WHERE user_id = ${id1} AND topic_id = ${id2}`,
-		USER: `WHERE user_id = ${id1}`,
-		TOPIC: `WHERE topic_id = ${id1}`,
+		ALL: `WHERE user_fk = ${id1} AND topic_fk = ${id2}`,
+		USER: `WHERE user_fk = ${id1}`,
+		TOPIC: `WHERE topic_fk = ${id1}`,
 	});
 
 	return talkieDataSource.query(`
     SELECT
       topic_id,
       topic,
-      emoji
+      topic_emoji
     FROM user_interest
-    LEFT JOIN topic_category ON topic_category.id = topic_id
+    LEFT JOIN topic_category ON topic_id = topic_fk
     ${whereCla[condition]}
   `);
 };
@@ -45,8 +45,8 @@ const getInterestCategoryByUserOrTopic = (condition, id1, id2) => {
 const insertInterest = (user_id, topic_id) => {
 	return talkieDataSource.query(`
     INSERT INTO user_interest (
-      user_id,
-      topic_id
+      user_fk,
+      topic_fk
     ) VALUES (
       ${user_id},
       ${topic_id}
@@ -57,16 +57,16 @@ const insertInterest = (user_id, topic_id) => {
 const deleteInterest = (user_id, topic_id) => {
 	return talkieDataSource.query(`
     DELETE FROM user_interest
-    WHERE user_id = ${user_id} AND topic_id = ${topic_id}
+    WHERE user_fk = ${user_id} AND topic_fk = ${topic_id}
   `);
 };
 
 const getSituationCategoryList = () => {
 	return talkieDataSource.query(`
     SELECT 
-      id AS situation_id,
+      situation_id,
       situation,
-      emoji
+      situation_emoji
     FROM situation_category
     `);
 };
@@ -74,19 +74,19 @@ const getSituationCategoryList = () => {
 const getEncounterCategoryListBySituation = (situation_id) => {
 	return talkieDataSource.query(`
     SELECT 
-      situation_category.id,
+      situation_id,
       situation,
-      situation_category.emoji,
+      situation_emoji,
       JSON_ARRAYAGG(
         JSON_OBJECT(
-          "encounter_id", encounter_category.id,
+          "encounter_id", encounter_id,
           "encounter", encounter,
-          "encounter_emoji", encounter_category.emoji
+          "encounter_emoji", encounter_emoji
         ) 
       ) AS encounters
     FROM situation_category
-    LEFT JOIN encounter_category ON situation_category.id = encounter_category.situation_id
-    WHERE situation_category.id = ${situation_id}
+    LEFT JOIN encounter_category ON situation_id = situation_fk
+    WHERE situation_id = ${situation_id}
   `);
 };
 
@@ -94,32 +94,32 @@ const getTopicCategory = (mode, user_id) => {
 	const QueryDiversityByMode = {
 		GUEST: `
     SELECT
-      id AS topic_id,
+      topic_id,
       topic,
-      emoji
+      topic_emoji
     FROM topic_category
     ORDER BY topic ASC
   `,
 		USER: `
       SELECT
-        topic_category.id AS topic_id,
+        topic_id,
         topic,
-        emoji,
-        IF(IS NULL(user_interest.id), 0, 1) AS interest_check
+        topic_emoji,
+        IF(IS NULL(user_fk), 0, 1) AS interest_check
       FROM topic_category
       LEFT JOIN user_interest 
-        ON user_id = ${user_id} AND user_interest.topic_id = topic_category.id
+        ON user_fk = ${user_id} AND topic_fk = topic_id
       ORDER BY InterestCheck DESC, topic ASC
       `,
 		RECOMMEND: `
       SELECT
-        topic_category.id AS topic_id,
+        topic_id,
         topic,
-        emoji,
-        COUNT(user_interest.id) AS interestedCnt
+        topic_emoji,
+        COUNT(interest_id) AS interestedCnt
       FROM topic_category
-      LEFT JOIN user_interest ON user_interest.topic_id = topic_category.id
-      GROUP BY topic_category.id
+      LEFT JOIN user_interest ON topic_fk = topic_id
+      GROUP BY topic_id
       ORDER BY interestedCnt DESC, topic ASC
       LIMIT 5 OFFSET ${Math.floor(Math.random() * 20)}
     `,
