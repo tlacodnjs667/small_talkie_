@@ -10,7 +10,7 @@ const getTopicsForSignUp = catchAsync((req, res) => {
 });
 
 const getInterestCategory = catchAsync(async (req, res) => {
-	const { id: user_id } = req.user;
+	const { user_id } = req.user;
 
 	const { status, data } = await categoryService.getInterestCategory(user_id);
 
@@ -18,7 +18,7 @@ const getInterestCategory = catchAsync(async (req, res) => {
 });
 
 const modifyUserInterest = catchAsync(async (req, res) => {
-	const { id: user_id } = req.user;
+	const { user_id } = req.user;
 	const { topic_id } = req.body;
 
 	const { status, message } = await categoryService.modifyUserInterest(
@@ -43,7 +43,7 @@ const getEncounterCategoryListBySituation = catchAsync(async (req, res) => {
 });
 
 const getTopicCategory = catchAsync(async (req, res) => {
-	const { id: user_id } = req.user;
+	const { user_id } = req.user;
 	const isUser = req.header;
 
 	const data = await categoryService.getTopicCategory(isUser, user_id);
