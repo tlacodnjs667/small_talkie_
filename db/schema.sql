@@ -163,6 +163,7 @@ CREATE TABLE `users` (
   `nickname` varchar(30) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `darkmode` tinyint(1) NOT NULL DEFAULT '0',
+  `profile_image_url` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
@@ -199,5 +200,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20230612082754'),
   ('20230612082810'),
   ('20230612082824'),
-  ('20230714065552');
+  ('20230714065552'),
+  ('20230719085253');
 UNLOCK TABLES;

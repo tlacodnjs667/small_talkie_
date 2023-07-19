@@ -37,4 +37,12 @@ const signin = catchAsync(async (req, res) => {
 	res.status(200).json({ message: "LOGIN_SUCCESS", authorization });
 });
 
-module.exports = { signup, signin };
+const getUserInfo = catchAsync((req, res) => {
+	const { user_id } = req.user;
+
+	const data = userService.getUserInfo(user_id);
+
+	res.status(200).json({ message: "", data });
+});
+
+module.exports = { signup, signin, getUserInfo };

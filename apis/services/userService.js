@@ -55,7 +55,7 @@ const signup = async (access_token, interest) => {
 const signin = async (access_token) => {
 	const { kakao_client_id } = await getUserInfoFromKakao(access_token);
 
-	const [AccountInfo] = await userDao.getUserInfo(kakao_client_id);
+	const [AccountInfo] = await userDao.getUserInfo("KAKAO_ID", kakao_client_id);
 
 	if (!AccountInfo) {
 		const error = new Error("SIGNUP_REQUIRED");
@@ -66,7 +66,12 @@ const signin = async (access_token) => {
 	// 회원 정보 수정에 관한 결정 여부
 };
 
-module.exports = { signup, signin };
+const getUserInfo = async (user_id) => {
+	const data = await userDao.getUserInfo("APP_ID", user_id);
+	return data;
+};
+
+module.exports = { signup, signin, getUserInfo };
 
 const getUserInfoFromKakao = async (access_token) => {
 	const result = await axios.post("https://kapi.kakao.com/v2/user/me", {

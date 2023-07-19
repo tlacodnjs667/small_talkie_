@@ -20,14 +20,27 @@ const checkDuplicated = (kakao_client_id) => {
 		: false;
 };
 
-const getUserInfo = (kakao_client_id) => {
-	return talkieDataSource.query(`
-    SELECT
-      id,
-      nickname
-    FROM users
-    WHERE kakao_client = ${kakao_client_id}
-  `);
+const getUserInfo = (mode, id) => {
+	const queryByMode = {
+		KAKAO_ID: `
+      SELECT
+        user_id,
+        nickname
+      FROM users
+      WHERE kakao_client = ${id}
+      `,
+		APP_ID: `
+      SELECT
+        nickname,
+        email,
+        darkmode,
+        profile_image_url
+      FROM users
+      WHERE user_id = ${id}
+    `,
+	};
+
+	return talkieDataSource.query(queryByMode[mode]);
 }; //nickname
 
 // 여기까지
