@@ -12,7 +12,7 @@ const { talkieDataSource } = require("./talkieDataSource");
 const checkDuplicated = (kakao_client_id) => {
 	return talkieDataSource.query(`
     SELECT
-      id
+      user_id
     FROM users
     WHERE kakao_client = ${kakao_client_id}
   `).length
@@ -25,7 +25,8 @@ const getUserInfo = (mode, id) => {
 		KAKAO_ID: `
       SELECT
         user_id,
-        nickname
+        nickname,
+        darkmode
       FROM users
       WHERE kakao_client = ${id}
       `,
@@ -70,4 +71,17 @@ const addUserInterest = (interestQuery) => {
   `);
 };
 
-module.exports = { checkDuplicated, getUserInfo, signup, addUserInterest };
+const modifyDarkmode = (user_id, modeToChange) => {
+	return talkieDataSource.query(`
+    UPDATE darkmode SET darkmode = ${modeToChange}
+    WHERE user_id = ${user_id}
+  `);
+};
+
+module.exports = {
+	checkDuplicated,
+	getUserInfo,
+	signup,
+	addUserInterest,
+	modifyDarkmode,
+};
