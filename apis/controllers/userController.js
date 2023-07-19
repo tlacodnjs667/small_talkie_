@@ -32,9 +32,27 @@ const signin = catchAsync(async (req, res) => {
 		throw error;
 	}
 
-	const authorization = await userService.signin(access_token);
+	const { authorization, darkmode } = await userService.signin(access_token);
 
-	res.status(200).json({ message: "LOGIN_SUCCESS", authorization });
+	res.status(200).json({ message: "LOGIN_SUCCESS", authorization, darkmode });
 });
 
-module.exports = { signup, signin };
+const getUserInfo = catchAsync((req, res) => {
+	const { user_id } = req.user;
+
+	const data = userService.getUserInfo(user_id);
+
+	res.status(200).json({ message: "", data });
+});
+
+const modifyDarkmode = catchAsync((req, res) => {
+	const { user_id } = req.user;
+
+	const result = userService.modifyDarkmode(user_id);
+
+	res
+		.status(200)
+		.message({ message: `MODE_HAS_BEEN_CHANED_TO_${result}_MODE` });
+});
+
+module.exports = { signup, signin, getUserInfo, modifyDarkmode };

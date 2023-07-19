@@ -12,7 +12,7 @@ const { talkieDataSource } = require("./talkieDataSource");
 const checkDuplicated = (kakao_client_id) => {
 	return talkieDataSource.query(`
     SELECT
-      id
+      user_id
     FROM users
     WHERE kakao_client = ${kakao_client_id}
   `).length
@@ -20,14 +20,28 @@ const checkDuplicated = (kakao_client_id) => {
 		: false;
 };
 
-const getUserInfo = (kakao_client_id) => {
-	return talkieDataSource.query(`
-    SELECT
-      id,
-      nickname
-    FROM users
-    WHERE kakao_client = ${kakao_client_id}
-  `);
+const getUserInfo = (mode, id) => {
+	const queryByMode = {
+		KAKAO_ID: `
+      SELECT
+        user_id,
+        nickname,
+        darkmode
+      FROM users
+      WHERE kakao_client = ${id}
+      `,
+		APP_ID: `
+      SELECT
+        nickname,
+        email,
+        darkmode,
+        profile_image_url
+      FROM users
+      WHERE user_id = ${id}
+    `,
+	};
+
+	return talkieDataSource.query(queryByMode[mode]);
 }; //nickname
 
 // 여기까지
@@ -57,4 +71,17 @@ const addUserInterest = (interestQuery) => {
   `);
 };
 
-module.exports = { checkDuplicated, getUserInfo, signup, addUserInterest };
+const modifyDarkmode = (user_id, modeToChange) => {
+	return talkieDataSource.query(`
+    UPDATE darkmode SET darkmode = ${modeToChange}
+    WHERE user_id = ${user_id}
+  `);
+};
+
+module.exports = {
+	checkDuplicated,
+	getUserInfo,
+	signup,
+	addUserInterest,
+	modifyDarkmode,
+};
