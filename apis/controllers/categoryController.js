@@ -1,10 +1,8 @@
 const categoryService = require("../services/categoryService");
 const { catchAsync } = require("../utils/globalErrorHandler");
 
-const getTopicsForSignUp = catchAsync((req, res) => {
-	const { start } = req.query;
-
-	const data = categoryService.getTopicsForSignUp(start);
+const getTopicsForSignUp = catchAsync(async (req, res) => {
+	const data = await categoryService.getTopicsForSignUp();
 
 	res.status(200).json({ data });
 });
@@ -36,17 +34,19 @@ const getSituationCategoryList = catchAsync(async (req, res) => {
 
 const getEncounterCategoryListBySituation = catchAsync(async (req, res) => {
 	const { situation_id } = req.params;
-	const data = await categoryService.getEncounterCategoryListBySituation(
+	const [data] = await categoryService.getEncounterCategoryListBySituation(
 		situation_id
 	);
 	res.status(200).json({ data });
 });
 
 const getTopicCategory = catchAsync(async (req, res) => {
-	const { user_id } = req.user;
-	const isUser = req.header;
+	const { is_user } = req.headers;
 
-	const data = await categoryService.getTopicCategory(isUser, user_id);
+	const data = await categoryService.getTopicCategory(
+		is_user,
+		req.user ? req.user.user_id : 0
+	);
 
 	res.status(200).json({ data });
 });

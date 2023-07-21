@@ -7,7 +7,7 @@ const talkieRouter = require("./talkieRouter");
 
 router.use("/user", userRouter);
 router.use("/talkie", talkieRouter);
-router.use("/topic", categoryRouter);
 router.use("/category", categoryRouter);
+router.use("/topic", categoryRouter);
 
 module.exports = router;

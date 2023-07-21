@@ -1,6 +1,6 @@
 const { talkieDataSource } = require("./talkieDataSource");
 
-const getTopicsForSignUp = (start = 0) => {
+const getTopicsForSignUp = () => {
 	return talkieDataSource.query(`
       SELECT
         topic_id, 
@@ -8,7 +8,6 @@ const getTopicsForSignUp = (start = 0) => {
         topic_emoji
       FROM topic_category
       ORDER BY topic
-      LIMIT 7 OFFSET ${start}
   `);
 };
 
@@ -105,7 +104,7 @@ const getTopicCategory = (mode, user_id) => {
         topic_id,
         topic,
         topic_emoji,
-        IF(IS NULL(user_fk), 0, 1) AS interest_check
+        IF(ISNULL(user_fk), 0, 1) AS InterestCheck
       FROM topic_category
       LEFT JOIN user_interest 
         ON user_fk = ${user_id} AND topic_fk = topic_id

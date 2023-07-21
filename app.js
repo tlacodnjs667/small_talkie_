@@ -11,8 +11,8 @@ const { talkieDataSource } = require("./apis/models/talkieDataSource");
 app.use(cors());
 app.use(express.json());
 
-app.use(morgan("combined"));
 app.use(router);
+app.use(morgan("combined"));
 
 app.post("/ping", (req, res) => {
 	const status = 200;
