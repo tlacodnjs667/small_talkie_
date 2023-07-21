@@ -6,7 +6,7 @@ const AuthMiddleware = require("../utils/authMiddleware");
 
 router.post("/signup", userController.signup);
 router.post("/signin", userController.signin);
-router.patch("", AuthMiddleware, userController.modifyDarkmode);
 router.get("", AuthMiddleware, userController.getUserInfo);
+router.patch("/darkmode", AuthMiddleware, userController.modifyDarkmode);
 
 module.exports = router;

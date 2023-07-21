@@ -4,13 +4,17 @@ const getTalkieCard = (isUser, offset = 0, user_id) => {
 	const QueryToGetTalkie = {
 		USER: ` 
       SELECT 
-        small_talkies.talkie_id,
-        talkie
+        talkie_id,
+        talkie,
+        topic_id,
+        topic,
+        IF(ISNULL(bookmark_id), 0, 1) AS isBookmarked
       FROM small_talkies
       LEFT JOIN topic_talk ON topic_talk.talkie_fk = small_talkies.talkie_id
       LEFT JOIN topic_category ON topic_category.topic_id = topic_talk.topic_fk
       LEFT JOIN user_interest ON user_interest.topic_fk = topic_category.topic_id
-      WHERE user_fk = ${user_id}
+      LEFT JOIN bookmarks ON talkie_id = bookmarks.talkie_fk AND bookmarks.user_fk = ${user_id}
+      WHERE user_interest.user_fk = ${user_id}
       LIMIT 7 OFFSET ${offset}
     `,
 		GUEST: `
@@ -62,6 +66,7 @@ const checkBookmarkByUserAndTalkie = (talkie_id, user_id) => {
     WHERE talkie_fk = ${talkie_id} AND user_fk = ${user_id}
   `);
 };
+//insert into bookmarks (talkie_fk, user_fk) VALUES (5, 2)
 
 const bookmarkTalkie = (talkie_id, user_id) => {
 	return talkieDataSource.query(`
@@ -112,14 +117,13 @@ const getTalkieCardByEncounter = (mode, encounter_id, start = 0, user_id) => {
           JSON_OBJECT(
             "talkie_id", talkie_id,
             "talkie", talkie,
-            "talkie_emoji", talkie_emoji,
-            "isSaved", IFNULL(0, 1)
+            "isSaved", IF(ISNULL(bookmark_id), 0, 1)
           )
         ) AS talkies
       FROM encounter_category
       LEFT JOIN encounter_talkie ON encounter_id = encounter_talkie.encounter_fk
-      LEFT JOIN small_talkies ON talkie_id = encounter_talkie.talk_fk
-      LEFT JOIN bookmarks ON bookmarks.talkie_id = talkie_id AND user_fd = ${user_id}
+      LEFT JOIN small_talkies ON talkie_id = encounter_talkie.talkie_fk
+      LEFT JOIN bookmarks ON bookmarks.talkie_fk = talkie_id AND user_fk = ${user_id}
       WHERE encounter_id = ${encounter_id}
       GROUP BY encounter_id
       LIMIT 7 OFFSET ${start};
@@ -129,7 +133,7 @@ const getTalkieCardByEncounter = (mode, encounter_id, start = 0, user_id) => {
 	return talkieDataSource.query(QueryByMode[mode]);
 };
 
-const getTalkieCardByTopic = (mode, topic_id, start, user_id) => {
+const getTalkieCardByTopic = (mode, topic_id, start = 0, user_id) => {
 	const QueryByMode = {
 		GUEST: `
       SELECT
@@ -163,7 +167,7 @@ const getTalkieCardByTopic = (mode, topic_id, start, user_id) => {
       FROM topic_category
       LEFT JOIN topic_talk ON topic_id = topic_talk.topic_fk
       LEFT JOIN small_talkies ON talkie_id = topic_talk.talkie_fk
-      LEFT JOIN bookmarks ON talkie_id = bookmarks.talk_fk AND user_fk = ${user_id}
+      LEFT JOIN bookmarks ON talkie_id = bookmarks.talkie_fk AND user_fk = ${user_id}
       WHERE topic_id = ${topic_id}
       GROUP BY topic_id
       LIMIT 7 OFFSET ${start}

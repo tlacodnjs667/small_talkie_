@@ -46,18 +46,12 @@ const getUserInfo = (mode, id) => {
 
 // 여기까지
 
-const signup = (
-	kakao_client_id,
-	queryBuildToUserProperty,
-	queryBuildToUserValue
-) => {
+const signup = (Properties, Values) => {
 	return talkieDataSource.query(`
     INSERT INTO users (
-      kakao_client
-      ${queryBuildToUserProperty}
+      ${Properties}
     ) VALUES (
-      ${kakao_client_id}
-      ${queryBuildToUserValue}
+      "${Values}"
     );
   `);
 };
@@ -66,14 +60,14 @@ const addUserInterest = (interestQuery) => {
 	return talkieDataSource.query(`
     INSERT INTO user_interest (
       user_id,
-      topic_id
+      topic_fk
     ) VALUES ${interestQuery}
   `);
 };
 
 const modifyDarkmode = (user_id, modeToChange) => {
 	return talkieDataSource.query(`
-    UPDATE darkmode SET darkmode = ${modeToChange}
+    UPDATE users SET darkmode = ${modeToChange}
     WHERE user_id = ${user_id}
   `);
 };

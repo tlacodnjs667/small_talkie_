@@ -1,7 +1,7 @@
 const categoryDao = require("../models/categoryDao");
 
-const getTopicsForSignUp = (start) => {
-	return categoryDao.getTopicsForSignUp(start);
+const getTopicsForSignUp = () => {
+	return categoryDao.getTopicsForSignUp();
 };
 
 const getInterestCategory = async (user_id) => {

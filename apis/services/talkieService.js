@@ -1,19 +1,8 @@
 const talkieDao = require("../models/talkieDao");
 const categoryDao = require("../models/categoryDao");
 
-const getTalkieCard = (isUser, user_id, offset) => {
-	const StrategyByMode = {
-		USER: async (isUser, offset, user_id) => {
-			const data = await talkieDao.getTalkieCard(isUser, offset, user_id);
-			return data;
-		},
-		GUEST: async (isUser, offset) => {
-			const data = await talkieDao.getTalkieCard(isUser, offset);
-			return data;
-		},
-	};
-
-	return StrategyByMode[isUser](isUser, offset, user_id);
+const getTalkieCard = async (is_user, offset, user_id) => {
+	return talkieDao.getTalkieCard(is_user, offset, user_id);
 };
 
 const getBookmarkedTalkies = async (user_id) => {
@@ -22,8 +11,7 @@ const getBookmarkedTalkies = async (user_id) => {
 
 const bookmarkTalkie = async (talkie_id, user_id) => {
 	const checkDuplicateBookmark = await talkieDao.checkBookmarkByUserAndTalkie(
-		talkie_id,
-		user_id
+		talkie_id
 	);
 
 	if (checkDuplicateBookmark.length) {
@@ -36,7 +24,7 @@ const bookmarkTalkie = async (talkie_id, user_id) => {
 };
 
 const deleteBookmark = async (bookmark_id, user_id) => {
-	const checkBookmark = await talkieDao.checkBookmarkById(bookmark_id);
+	const checkBookmark = await talkieDao.checkBookmarkById(bookmark_id, user_id);
 
 	if (!checkBookmark.length) {
 		const error = new Error(
@@ -46,7 +34,7 @@ const deleteBookmark = async (bookmark_id, user_id) => {
 		throw error;
 	}
 
-	if (checkBookmark[0].user_id != user_id) {
+	if (checkBookmark[0].user_fk != user_id) {
 		const err = new Error("THIS_BOOKMARK_IS_OWNED_BY_SOMEONE_ELSE");
 		err.statusCode = 403;
 		throw err;
@@ -68,11 +56,15 @@ const getTalkieCardByEncounter = async (mode, encounter_id, start, user_id) => {
 
 const getTalkieCardByTopic = async (mode, topic_id, start, user_id) => {
 	const topics = await categoryDao.getTopicCategory("RECOMMEND");
-	const talkie = talkieDao.getTalkieCardByTopic(mode, topic_id, start, user_id);
+	const [talkie] = await talkieDao.getTalkieCardByTopic(
+		mode,
+		topic_id,
+		start,
+		user_id
+	);
 
 	return { topics, talkie };
 };
-
 module.exports = {
 	getTalkieCard,
 	getBookmarkedTalkies,
