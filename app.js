@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(router);
 app.use(morgan("combined"));
 
-app.post("/ping", (req, res) => {
+app.get("/ping", (req, res) => {
 	const status = 200;
 	const message = "PONG";
 	res.status(status).json({ message: message });
