@@ -1,0 +1,246 @@
+[
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 1
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 2
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 3
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 4
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 5
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 6
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 7
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 8
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 9
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 10
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 11
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 12
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 13
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 14
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 15
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 16
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 17
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 18
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 19
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 20
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 21
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 22
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 23
+  },
+  {
+    "encounter_fk": 2,
+    "talkie_fk": 24
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 25
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 26
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 27
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 28
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 29
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 30
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 31
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 32
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 33
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 34
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 35
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 36
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 37
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 38
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 39
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 40
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 41
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 42
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 43
+  },
+  {
+    "encounter_fk": 1,
+    "talkie_fk": 44
+  },
+  {
+    "encounter_fk": 6,
+    "talkie_fk": 45
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 46
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 52
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 56
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 57
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 58
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 59
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 60
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 61
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 62
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 63
+  },
+  {
+    "encounter_fk": 3,
+    "talkie_fk": 64
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 71
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 72
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 73
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 74
+  },
+  {
+    "encounter_fk": 4,
+    "talkie_fk": 75
+  }
+]

@@ -163,7 +163,7 @@ CREATE TABLE `users` (
   `nickname` varchar(30) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `darkmode` tinyint(1) NOT NULL DEFAULT '0',
-  `profile_image_url` varchar(1000) DEFAULT NULL,
+  `profile_image_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
@@ -171,7 +171,7 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'smalltalkie'
+-- Dumping routines for database 'small_talkie'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

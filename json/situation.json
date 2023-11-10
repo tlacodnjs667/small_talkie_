@@ -1,0 +1,18 @@
+[
+  {
+    "situation": "회사에서",
+    "id": 1
+  },
+  {
+    "situation": "연애",
+    "id": 2
+  },
+  {
+    "situation": "모임",
+    "id": 3
+  },
+  {
+    "situation": "친척, 가족",
+    "id": 4
+  }
+]

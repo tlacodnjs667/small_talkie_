@@ -1,4 +1,6 @@
 const { DataSource } = require("typeorm");
+const { checkDefaultDataInDB } = require('../../json/upload_json');
+
 require("dotenv").config();
 const talkieDataSource = new DataSource({
 	type: process.env.TYPEORM_CONNECTION,
@@ -11,6 +13,7 @@ const talkieDataSource = new DataSource({
 
 talkieDataSource.initialize().then(() => {
 	console.log(`BE_DATASOURCE_HAS_BEEN_INITIALIZED!`);
+	checkDefaultDataInDB(talkieDataSource);
 });
 
 module.exports = { talkieDataSource };

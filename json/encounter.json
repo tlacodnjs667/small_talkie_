@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "encounter": "휴가",
+    "situation_fk": 1
+  },
+  {
+    "id": 2,
+    "encounter": "날씨",
+    "situation_fk": 1
+  },
+  {
+    "id": 3,
+    "encounter": "점심시간",
+    "situation_fk": 1
+  },
+  {
+    "id": 4,
+    "encounter": "소개팅",
+    "situation_fk": 2
+  },
+  {
+    "id": 5,
+    "encounter": "권태기",
+    "situation_fk": 2
+  },
+  {
+    "id": 6,
+    "encounter": "동창회",
+    "situation_fk": 3
+  },
+  {
+    "id": 7,
+    "encounter": "잘 모르는 집안 어르신과는?",
+    "situation_fk": 4
+  },
+  {
+    "id": 8,
+    "encounter": "오랫동안 못 본 친척에게",
+    "situation_fk": 4
+  }
+]
